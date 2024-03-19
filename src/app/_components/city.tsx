@@ -1,11 +1,11 @@
 import { useGLTF } from "@react-three/drei";
 import { RigidBody } from "@react-three/rapier";
-import { useEffect } from "react";
+import { useLayoutEffect } from "react";
 
 export const City = () => {
   const { scene } = useGLTF("/models/city.glb");
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (scene) {
       // 모델에 그림자 속성 추가
       scene.traverse((obj) => {
