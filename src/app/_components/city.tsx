@@ -22,4 +22,4 @@ export const City = () => {
   );
 };
 
-useGLTF.preload("/city.glb");
+useGLTF.preload("/models/city.glb");
