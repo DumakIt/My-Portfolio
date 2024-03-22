@@ -6,6 +6,7 @@ import Lights from "./_components/lights";
 import { Suspense } from "react";
 import { Physics } from "@react-three/rapier";
 import { City } from "./_components/city";
+import Character from "./_components/character";
 
 export default function HomePage() {
   return (
@@ -16,6 +17,7 @@ export default function HomePage() {
         <Suspense>
           <Physics>
             <City />
+            <Character />
           </Physics>
         </Suspense>
       </Canvas>
