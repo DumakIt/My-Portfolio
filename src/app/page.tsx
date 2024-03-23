@@ -12,9 +12,9 @@ export default function HomePage() {
   return (
     <S.Main>
       <Canvas shadows camera={{ far: 500, near: 1 }}>
-        <color attach={"background"} args={["rgb(56, 135, 255)"]} />
-        <Lights />
         <Suspense>
+          <color attach={"background"} args={["rgb(56, 135, 255)"]} />
+          <Lights />
           <Physics>
             <City />
             <Character />
