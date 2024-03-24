@@ -1,8 +1,8 @@
 "use client";
 
 import * as THREE from "three";
-import { useGLTF, useKeyboardControls } from "@react-three/drei";
-import { CapsuleCollider, RapierRigidBody, RigidBody, useRapier } from "@react-three/rapier";
+import { useAnimations, useGLTF, useKeyboardControls } from "@react-three/drei";
+import { CapsuleCollider, RapierRigidBody, RigidBody } from "@react-three/rapier";
 import { useLayoutEffect, useMemo, useRef } from "react";
 import { useCharacterCam } from "../_hooks/useCharacterCam";
 import { useFrame, useThree } from "@react-three/fiber";
@@ -16,11 +16,13 @@ export default function Character() {
   const characterRef = useRef<THREE.Mesh>(null);
   const groupRef = useRef<THREE.Group>(null);
   const rapierRef = useRef<RapierRigidBody>(null);
+  const nowAction = useRef("");
 
-  const { scene } = useGLTF("/models/femaleTypeA.glb");
+  const { scene, animations } = useGLTF("/models/femaleTypeA.glb");
   const { camera } = useThree();
   const { XRotation, YRotation } = useCharacterCam();
-  const { canJump } = useRaycast(rapierRef);
+  const { canJump, isFalling } = useRaycast(rapierRef);
+  const { actions } = useAnimations(animations, characterRef);
   const [, getKeys] = useKeyboardControls();
 
   useLayoutEffect(() => {
@@ -46,6 +48,31 @@ export default function Character() {
   }, [scene]);
 
   useFrame(() => {
+    if (actions) {
+      const { forward, backward, left, right } = getKeys();
+      let nextAction = "";
+      if (!canJump.current) {
+        nextAction = "Jump";
+      } else if (isFalling.current) {
+        nextAction = "Fall";
+      } else if (canJump.current) {
+        if (forward || backward || left || right) {
+          nextAction = "Run";
+        } else {
+          nextAction = "Idle";
+        }
+      }
+
+      if (actions[nextAction] && nowAction.current !== nextAction) {
+        if (nextAction === "Jump") actions[nextAction]?.setDuration(0.8);
+        actions[nowAction.current]?.fadeOut(0.3);
+        actions[nextAction]?.reset().fadeIn(0.2).play();
+        nowAction.current = nextAction;
+      }
+    }
+  });
+
+  useFrame(() => {
     if (!characterRef.current) return;
     if (!rapierRef.current) return;
     if (!groupRef.current) return;
@@ -61,18 +88,20 @@ export default function Character() {
       YRotation.rotateY(-rotate);
     }
 
-    // "W, A, S, D" 입력시 현재 방향 기준으로 캐릭터 회전
-    // ex) "S" 입력시 카메라는 계속 앞을 보고 캐릭터가 뒤를 보게 회전
-    characterRef.current.rotation.y = Math.atan2(inputDirection.x, inputDirection.z);
-    // 현재 캐릭터가 보는 방향으로 이동하기 위한 물리 값 지정
-    linvelDirection.set(inputDirection.x, 0, inputDirection.z).normalize().multiplyScalar(4).applyEuler(groupRef.current.rotation);
-    // 캐릭터 이동
-    rapierRef.current.setLinvel({ x: linvelDirection.x, y: velocity.y, z: linvelDirection.z }, true);
+    if (forward || backward || left || right) {
+      // "W, A, S, D" 입력시 현재 방향 기준으로 캐릭터 회전
+      // ex) "S" 입력시 카메라는 계속 앞을 보고 캐릭터가 뒤를 보게 회전
+      characterRef.current.rotation.y = Math.atan2(inputDirection.x, inputDirection.z);
+      // 현재 캐릭터가 보는 방향으로 이동하기 위한 물리 값 지정
+      linvelDirection.set(inputDirection.x, 0, inputDirection.z).normalize().multiplyScalar(4).applyEuler(groupRef.current.rotation);
+      // 캐릭터 이동
+      rapierRef.current.setLinvel({ x: linvelDirection.x, y: velocity.y, z: linvelDirection.z }, true);
 
-    if (jump && canJump.current) {
-      // 캐릭터 점프
-      rapierRef.current.setLinvel({ x: velocity.x, y: 3, z: velocity.z }, true);
-      canJump.current = false;
+      if (jump && canJump.current) {
+        // 캐릭터 점프
+        rapierRef.current.setLinvel({ x: velocity.x, y: 3, z: velocity.z }, true);
+        canJump.current = false;
+      }
     }
   });
 
