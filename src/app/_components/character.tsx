@@ -48,33 +48,33 @@ export default function Character() {
   }, [scene]);
 
   useFrame(() => {
-    if (actions) {
-      // 캐릭터 애니메이션
-      const { forward, backward, left, right, run } = getKeys();
-      let nextAction = "Idle";
+    if (!actions) return;
 
-      if (!canJump.current) {
-        nextAction = "Jump";
-      } else if (isFalling.current) {
-        nextAction = "Fall";
-      } else if (canJump.current) {
-        if (forward || backward || left || right) {
-          if (run) {
-            nextAction = "Run";
-          } else {
-            nextAction = "Walk";
-          }
+    // 캐릭터 애니메이션
+    const { forward, backward, left, right, run } = getKeys();
+    let nextAction = "Idle";
+
+    if (!canJump.current) {
+      nextAction = "Jump";
+    } else if (isFalling.current) {
+      nextAction = "Fall";
+    } else if (canJump.current) {
+      if (forward || backward || left || right) {
+        if (run) {
+          nextAction = "Run";
         } else {
-          nextAction = "Idle";
+          nextAction = "Walk";
         }
+      } else {
+        nextAction = "Idle";
       }
+    }
 
-      if (actions[nextAction] && nowAction.current !== nextAction) {
-        if (nextAction === "Jump") actions[nextAction]?.setDuration(0.8);
-        actions[nowAction.current]?.fadeOut(0.3);
-        actions[nextAction]?.reset().fadeIn(0.2).play();
-        nowAction.current = nextAction;
-      }
+    if (actions[nextAction] && nowAction.current !== nextAction) {
+      if (nextAction === "Jump") actions[nextAction]?.setDuration(0.8);
+      actions[nowAction.current]?.fadeOut(0.3);
+      actions[nextAction]?.reset().fadeIn(0.2).play();
+      nowAction.current = nextAction;
     }
   });
 
