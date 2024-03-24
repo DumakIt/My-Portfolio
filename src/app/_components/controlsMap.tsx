@@ -9,6 +9,7 @@ export default function ControlsMap({ children }: { children: React.ReactNode })
     { name: "left", keys: ["KeyA", "ArrowLeft"] },
     { name: "right", keys: ["KeyD", "ArrowRight"] },
     { name: "jump", keys: ["Space"] },
+    { name: "run", keys: ["ShiftLeft"] },
   ];
 
   return <KeyboardControls map={controls}>{children}</KeyboardControls>;

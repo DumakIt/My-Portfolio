@@ -50,15 +50,20 @@ export default function Character() {
   useFrame(() => {
     if (actions) {
       // 캐릭터 애니메이션
-      const { forward, backward, left, right } = getKeys();
-      let nextAction = "";
+      const { forward, backward, left, right, run } = getKeys();
+      let nextAction = "Idle";
+
       if (!canJump.current) {
         nextAction = "Jump";
       } else if (isFalling.current) {
         nextAction = "Fall";
       } else if (canJump.current) {
         if (forward || backward || left || right) {
-          nextAction = "Run";
+          if (run) {
+            nextAction = "Run";
+          } else {
+            nextAction = "Walk";
+          }
         } else {
           nextAction = "Idle";
         }
@@ -78,7 +83,7 @@ export default function Character() {
     if (!rapierRef.current) return;
     if (!groupRef.current) return;
 
-    const { forward, backward, left, right, jump } = getKeys();
+    const { forward, backward, left, right, jump, run } = getKeys();
     inputDirection.copy({ x: Number(left) - Number(right), y: 0, z: Number(forward) - Number(backward) }); // 현재 입력 방향 값 저장
     velocity.copy(rapierRef.current.linvel()); // 현재 캐릭터의 물리 값 저장
 
@@ -93,8 +98,9 @@ export default function Character() {
       // "W, A, S, D" 입력시 현재 방향 기준으로 캐릭터 회전
       // ex) "S" 입력시 카메라는 계속 앞을 보고 캐릭터가 뒤를 보게 회전
       characterRef.current.rotation.y = Math.atan2(inputDirection.x, inputDirection.z);
+      const speed = run ? 4.5 : 2.5;
       // 현재 캐릭터가 보는 방향으로 이동하기 위한 물리 값 지정
-      linvelDirection.set(inputDirection.x, 0, inputDirection.z).normalize().multiplyScalar(4).applyEuler(groupRef.current.rotation);
+      linvelDirection.set(inputDirection.x, 0, inputDirection.z).normalize().multiplyScalar(speed).applyEuler(groupRef.current.rotation);
       // 캐릭터 이동
       rapierRef.current.setLinvel({ x: linvelDirection.x, y: velocity.y, z: linvelDirection.z }, true);
 
