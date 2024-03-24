@@ -1,3 +1,5 @@
+"use client";
+
 import * as THREE from "three";
 import { useGLTF, useKeyboardControls } from "@react-three/drei";
 import { CapsuleCollider, RapierRigidBody, RigidBody, useRapier } from "@react-three/rapier";

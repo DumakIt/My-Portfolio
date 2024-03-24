@@ -1,3 +1,5 @@
+"use client";
+
 import { KeyboardControls } from "@react-three/drei";
 
 export default function ControlsMap({ children }: { children: React.ReactNode }) {
