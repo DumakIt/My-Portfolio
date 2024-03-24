@@ -79,6 +79,7 @@ export default function Character() {
   });
 
   useFrame(() => {
+    if (!document.pointerLockElement) return;
     if (!characterRef.current) return;
     if (!rapierRef.current) return;
     if (!groupRef.current) return;

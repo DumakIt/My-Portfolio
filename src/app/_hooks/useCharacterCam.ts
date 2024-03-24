@@ -8,6 +8,7 @@ export const useCharacterCam = () => {
   useLayoutEffect(() => {
     if (XRotation && YRotation) {
       const handleMouseMove = (event: MouseEvent) => {
+        if (!document.pointerLockElement) return;
         // mousemove 이벤트는 마우스의 이동값을 상하가 movementY, 좌우가 movementX 이며
         // 마우스를 위로 올리거나, 우측으로 이동시 "+"값 이기 때문에 "-"를 붙임
         YRotation.rotateY(-event.movementX * 0.003);
