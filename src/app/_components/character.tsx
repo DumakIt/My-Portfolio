@@ -49,6 +49,7 @@ export default function Character() {
 
   useFrame(() => {
     if (actions) {
+      // 캐릭터 애니메이션
       const { forward, backward, left, right } = getKeys();
       let nextAction = "";
       if (!canJump.current) {
