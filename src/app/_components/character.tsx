@@ -16,7 +16,7 @@ export default function Character() {
   const characterRef = useRef<THREE.Mesh>(null);
   const groupRef = useRef<THREE.Group>(null);
   const rapierRef = useRef<RapierRigidBody>(null);
-  const nowAction = useRef("");
+  const nowAction = useRef("Idle");
 
   const { scene, animations } = useGLTF("/models/femaleTypeA.glb");
   const { camera } = useThree();
@@ -38,23 +38,26 @@ export default function Character() {
   }, [camera, groupRef, XRotation, YRotation, scene]);
 
   useLayoutEffect(() => {
-    if (scene) {
+    if (scene && actions) {
       // 모델에 그림자 속성 추가
       scene.traverse((obj) => {
         obj.castShadow = true;
         obj.receiveShadow = true;
       });
+      // 첫 애니메이션 재생
+      actions[nowAction.current]?.reset().play();
     }
-  }, [scene]);
+  }, [scene, actions]);
 
   useFrame(() => {
+    if (!document.pointerLockElement) return;
     if (!actions) return;
 
     // 캐릭터 애니메이션
     const { forward, backward, left, right, run } = getKeys();
     let nextAction = "Idle";
 
-    if (!canJump.current) {
+    if (!canJump.current && !isFalling.current) {
       nextAction = "Jump";
     } else if (isFalling.current) {
       nextAction = "Fall";
@@ -65,8 +68,6 @@ export default function Character() {
         } else {
           nextAction = "Walk";
         }
-      } else {
-        nextAction = "Idle";
       }
     }
 
@@ -88,15 +89,13 @@ export default function Character() {
     inputDirection.copy({ x: Number(left) - Number(right), y: 0, z: Number(forward) - Number(backward) }); // 현재 입력 방향 값 저장
     velocity.copy(rapierRef.current.linvel()); // 현재 캐릭터의 물리 값 저장
 
-    if (forward) {
-      // "W" 입력시 현재 카메라가 보고 있는 방향으로 캐릭터 회전
+    if (forward || backward || left || right) {
+      // "W, A, S, D" 입력시 현재 카메라가 보고 있는 방향이 기준이 되도록 캐릭터 그룹을 회전
       const rotate = YRotation.rotation.y;
       groupRef.current?.rotateY(rotate);
       YRotation.rotateY(-rotate);
-    }
 
-    if (forward || backward || left || right) {
-      // "W, A, S, D" 입력시 현재 방향 기준으로 캐릭터 회전
+      // 현재 방향 기준으로 캐릭터 회전
       // ex) "S" 입력시 카메라는 계속 앞을 보고 캐릭터가 뒤를 보게 회전
       characterRef.current.rotation.y = Math.atan2(inputDirection.x, inputDirection.z);
       const speed = run ? 4.5 : 2.5;
