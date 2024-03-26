@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import LibrarySettings from "./_lib/librarySettings";
+import StyledComponentsRegistry from "./_lib/styledComponentsRegistry";
+import RecoilSetting from "./_lib/recoilSetting";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -15,7 +16,9 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body>
-        <LibrarySettings>{children}</LibrarySettings>
+        <RecoilSetting>
+          <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
+        </RecoilSetting>
       </body>
     </html>
   );

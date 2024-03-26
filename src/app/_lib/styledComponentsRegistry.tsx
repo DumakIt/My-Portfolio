@@ -3,9 +3,8 @@
 import React, { useState } from "react";
 import { useServerInsertedHTML } from "next/navigation";
 import { ServerStyleSheet, StyleSheetManager } from "styled-components";
-import { RecoilRoot } from "recoil";
 
-export default function LibrarySettings({ children }: { children: React.ReactNode }) {
+export default function StyledComponentsRegistry({ children }: { children: React.ReactNode }) {
   const [styledComponentsStyleSheet] = useState(() => new ServerStyleSheet());
 
   useServerInsertedHTML(() => {
@@ -16,9 +15,5 @@ export default function LibrarySettings({ children }: { children: React.ReactNod
 
   if (typeof window !== "undefined") return <>{children}</>;
 
-  return (
-    <RecoilRoot>
-      <StyleSheetManager sheet={styledComponentsStyleSheet.instance}>{children}</StyleSheetManager>
-    </RecoilRoot>
-  );
+  return <StyleSheetManager sheet={styledComponentsStyleSheet.instance}>{children}</StyleSheetManager>;
 }
