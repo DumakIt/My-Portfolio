@@ -1,3 +1,5 @@
+"use client";
+
 import { RecoilRoot } from "recoil";
 
 export default function RecoilSetting({ children }: { children: React.ReactNode }) {
