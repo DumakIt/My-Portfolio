@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import StyledComponentsRegistry from "./_lib/styledComponentsRegistry";
-import RecoilSetting from "./_lib/recoilSetting";
+import StyledComponentsRegistry from "./lib/styledComponentsRegistry";
+import RecoilSetting from "./lib/recoilSetting";
 
 export const metadata: Metadata = {
   title: "Create Next App",
