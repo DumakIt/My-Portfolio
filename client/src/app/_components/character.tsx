@@ -4,9 +4,9 @@ import * as THREE from "three";
 import { useAnimations, useGLTF, useKeyboardControls } from "@react-three/drei";
 import { CapsuleCollider, RapierRigidBody, RigidBody } from "@react-three/rapier";
 import { useLayoutEffect, useMemo, useRef } from "react";
-import { useCharacterCam } from "../hooks/useCharacterCam";
+import { useCharacterCam } from "../_hooks/useCharacterCam";
 import { useFrame, useThree } from "@react-three/fiber";
-import { useRaycast } from "../hooks/useRaycast";
+import { useRaycast } from "../_hooks/useRaycast";
 
 export default function Character() {
   const velocity = useMemo(() => new THREE.Vector3(), []);

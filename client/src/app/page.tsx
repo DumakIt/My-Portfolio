@@ -2,12 +2,12 @@
 
 import { Canvas } from "@react-three/fiber";
 import * as S from "./pageStyles";
-import Lights from "./components/lights";
+import Lights from "./_components/lights";
 import { Suspense, useRef } from "react";
 import { Physics } from "@react-three/rapier";
-import { City } from "./components/city";
-import Character from "./components/character";
-import ControlsMap from "./components/controlsMap";
+import { City } from "./_components/city";
+import Character from "./_components/character";
+import ControlsMap from "./_components/controlsMap";
 
 export default function HomePage() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
