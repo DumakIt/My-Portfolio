@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import RecoilSetting from "../_lib/recoilSetting";
+import RecoilSetting from "./_lib/recoilSetting";
 
 export const metadata: Metadata = {
   title: "Create Next App",
