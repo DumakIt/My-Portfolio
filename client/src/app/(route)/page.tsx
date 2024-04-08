@@ -1,7 +1,6 @@
 "use client";
-
+import style from "./page.module.css";
 import { Canvas } from "@react-three/fiber";
-import * as S from "./pageStyles";
 import Lights from "./_components/lights";
 import { Suspense, useRef } from "react";
 import { Physics } from "@react-three/rapier";
@@ -19,7 +18,7 @@ export default function HomePage() {
   };
 
   return (
-    <S.Main>
+    <main className={style.main}>
       <ControlsMap>
         <Canvas ref={canvasRef} shadows camera={{ far: 500, near: 1 }} onClick={onClickCanvas}>
           <Suspense>
@@ -32,6 +31,6 @@ export default function HomePage() {
           </Suspense>
         </Canvas>
       </ControlsMap>
-    </S.Main>
+    </main>
   );
 }

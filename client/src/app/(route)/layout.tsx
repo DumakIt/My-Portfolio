@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import StyledComponentsRegistry from "../_lib/styledComponentsRegistry";
 import RecoilSetting from "../_lib/recoilSetting";
 
 export const metadata: Metadata = {
@@ -16,9 +15,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body>
-        <RecoilSetting>
-          <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
-        </RecoilSetting>
+        <RecoilSetting>{children}</RecoilSetting>
       </body>
     </html>
   );
