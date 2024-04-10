@@ -1,89 +1,71 @@
 "use client";
 
 import * as THREE from "three";
-import { useAnimations, useGLTF, useKeyboardControls } from "@react-three/drei";
+import { useKeyboardControls } from "@react-three/drei";
 import { CapsuleCollider, RapierRigidBody, RigidBody } from "@react-three/rapier";
-import { useLayoutEffect, useMemo, useRef } from "react";
+import { useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useCharacterCam } from "../_hooks/useCharacterCam";
 import { useFrame, useThree } from "@react-three/fiber";
 import { useRaycast } from "../_hooks/useRaycast";
+import CharacterModel from "./characterModel";
+import { Socket } from "socket.io-client";
 
-export default function Character() {
+interface ICharacterSetting {
+  socket: Socket | null;
+  playerPosition: number[];
+}
+
+export default function CharacterSetting({ socket, playerPosition }: ICharacterSetting) {
   const velocity = useMemo(() => new THREE.Vector3(), []);
   const inputDirection = useMemo(() => new THREE.Vector3(0, 0, 0), []);
   const linvelDirection = useMemo(() => new THREE.Vector3(), []);
+  const worldPosition = useMemo(() => new THREE.Vector3(), []);
+  const worldQuaternion = useMemo(() => new THREE.Quaternion(), []);
+  const worldEuler = useMemo(() => new THREE.Euler(), []);
 
-  const characterRef = useRef<THREE.Mesh>(null);
+  const characterRef = useRef<THREE.Group>(null);
   const groupRef = useRef<THREE.Group>(null);
   const rapierRef = useRef<RapierRigidBody>(null);
-  const nowAction = useRef("Idle");
 
-  const { scene, animations } = useGLTF("/models/femaleTypeA.glb");
   const { camera } = useThree();
   const { XRotation, YRotation } = useCharacterCam();
   const { canJump, isFalling } = useRaycast(rapierRef);
-  const { actions } = useAnimations(animations, characterRef);
+  const [nextAction, setNextAction] = useState("Idle");
   const [, getKeys] = useKeyboardControls();
 
   useLayoutEffect(() => {
-    if (camera && groupRef.current) {
+    if (camera && groupRef.current && characterRef.current) {
       // 카메라 관련 기본 설정
-      camera.position.set(scene.position.x, scene.position.y + 2, scene.position.z - 2.5); // 카메라 기본 위치 설정
-      camera.lookAt(scene.position.x, scene.position.y + 1, scene.position.z); // 카메라가 캐릭터를 바라보게 설정
+      camera.position.set(characterRef.current.position.x, characterRef.current.position.y + 2, characterRef.current.position.z - 2.5); // 카메라 기본 위치 설정
+      camera.lookAt(characterRef.current.position.x, characterRef.current.position.y + 1, characterRef.current.position.z); // 카메라가 캐릭터를 바라보게 설정
 
       groupRef.current?.add(YRotation); // YRotation을 groupRef 그룹에 추가
       YRotation.add(XRotation); // XRotation을 YRotation 그룹에 추가
       XRotation.add(camera); // 카메라를 XRotation 그룹에 추가
     }
-  }, [camera, groupRef, XRotation, YRotation, scene]);
-
-  useLayoutEffect(() => {
-    if (scene && actions) {
-      // 모델에 그림자 속성 추가
-      scene.traverse((obj) => {
-        obj.castShadow = true;
-        obj.receiveShadow = true;
-      });
-      // 첫 애니메이션 재생
-      actions[nowAction.current]?.reset().play();
-    }
-  }, [scene, actions]);
+  }, [camera, groupRef, XRotation, YRotation, characterRef]);
 
   useFrame(() => {
     if (!document.pointerLockElement) return;
-    if (!actions) return;
 
     // 캐릭터 애니메이션
     const { forward, backward, left, right, run } = getKeys();
-    let nextAction = "Idle";
+    let action = "Idle";
 
     if (!canJump.current && !isFalling.current) {
-      nextAction = "Jump";
+      action = "Jump";
     } else if (isFalling.current) {
-      nextAction = "Fall";
-    } else if (canJump.current) {
-      if (forward || backward || left || right) {
-        if (run) {
-          nextAction = "Run";
-        } else {
-          nextAction = "Walk";
-        }
-      }
+      action = "Fall";
+    } else if (canJump.current && (forward || backward || left || right)) {
+      action = run ? "Run" : "Walk";
     }
 
-    if (actions[nextAction] && nowAction.current !== nextAction) {
-      if (nextAction === "Jump") actions[nextAction]?.setDuration(0.8);
-      actions[nowAction.current]?.fadeOut(0.3);
-      actions[nextAction]?.reset().fadeIn(0.2).play();
-      nowAction.current = nextAction;
-    }
+    if (nextAction !== action) setNextAction(action);
   });
 
   useFrame(() => {
     if (!document.pointerLockElement) return;
-    if (!characterRef.current) return;
-    if (!rapierRef.current) return;
-    if (!groupRef.current) return;
+    if (!characterRef.current || !rapierRef.current || !groupRef.current) return;
 
     const { forward, backward, left, right, jump, run } = getKeys();
     inputDirection.copy({ x: Number(left) - Number(right), y: 0, z: Number(forward) - Number(backward) }); // 현재 입력 방향 값 저장
@@ -112,14 +94,27 @@ export default function Character() {
     }
   });
 
+  useFrame(() => {
+    // 월드 좌표 기준 캐릭터의 위치 및 회전값 저장
+    characterRef.current?.getWorldPosition(worldPosition);
+    characterRef.current?.getWorldQuaternion(worldQuaternion);
+    worldEuler.setFromQuaternion(worldQuaternion);
+
+    const position = worldPosition.toArray();
+    const rotation = worldEuler.toArray();
+
+    if (playerPosition[0] !== position[0] && playerPosition[1] !== position[1] && playerPosition[2] !== position[2]) {
+      // 캐릭터 위치가 변경되면 새로운 위치 전송
+      socket?.emit("move", { position, rotation, action: nextAction });
+    }
+  });
+
   return (
     <RigidBody ref={rapierRef} colliders={false} position={[0, 1.6, 0]} friction={2} lockRotations>
       <CapsuleCollider args={[0.4, 0.4]} position={[0, 0.8, 0]} />
       <group ref={groupRef}>
-        <primitive ref={characterRef} object={scene} />
+        <CharacterModel me={true} nextAction={nextAction} selectCharacter={1} characterRef={characterRef} />
       </group>
     </RigidBody>
   );
 }
-
-useGLTF.preload("/models/femaleTypeA.glb");

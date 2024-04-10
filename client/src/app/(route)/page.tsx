@@ -1,11 +1,12 @@
 "use client";
+
 import style from "./page.module.css";
 import { Canvas } from "@react-three/fiber";
 import Lights from "./_components/lights";
 import { Suspense, useRef } from "react";
 import { Physics } from "@react-three/rapier";
 import { City } from "./_components/city";
-import Character from "./_components/character";
+import Characters from "./_components/characters";
 import ControlsMap from "./_components/controlsMap";
 
 export default function HomePage() {
@@ -26,7 +27,7 @@ export default function HomePage() {
             <Lights />
             <Physics>
               <City />
-              <Character />
+              <Characters />
             </Physics>
           </Suspense>
         </Canvas>
