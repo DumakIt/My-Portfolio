@@ -86,12 +86,12 @@ export default function CharacterSetting({ socket, playerPosition, selectCharact
       linvelDirection.set(inputDirection.x, 0, inputDirection.z).normalize().multiplyScalar(speed).applyEuler(groupRef.current.rotation);
       // 캐릭터 이동
       rapierRef.current.setLinvel({ x: linvelDirection.x, y: velocity.y, z: linvelDirection.z }, true);
+    }
 
-      if (jump && canJump.current) {
-        // 캐릭터 점프
-        rapierRef.current.setLinvel({ x: velocity.x, y: 3, z: velocity.z }, true);
-        canJump.current = false;
-      }
+    if (jump && canJump.current) {
+      // 캐릭터 점프
+      rapierRef.current.setLinvel({ x: velocity.x, y: 3, z: velocity.z }, true);
+      canJump.current = false;
     }
   });
 
