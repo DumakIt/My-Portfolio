@@ -15,7 +15,7 @@ export default function Characters() {
     <>
       {players?.map((player) =>
         player.id === me?.id ? (
-          <CharacterSetting key={player.id} socket={socket} playerPosition={player?.position} />
+          <CharacterSetting key={player.id} socket={socket} playerPosition={player?.position} selectCharacter={player.selectCharacter} />
         ) : (
           <CharacterModel key={player.id} me={false} nextAction={player.action} selectCharacter={1} position={player.position} rotation={player.rotation} />
         )

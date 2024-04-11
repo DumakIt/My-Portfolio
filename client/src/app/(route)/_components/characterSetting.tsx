@@ -13,9 +13,10 @@ import { Socket } from "socket.io-client";
 interface ICharacterSetting {
   socket: Socket | null;
   playerPosition: number[];
+  selectCharacter: number;
 }
 
-export default function CharacterSetting({ socket, playerPosition }: ICharacterSetting) {
+export default function CharacterSetting({ socket, playerPosition, selectCharacter }: ICharacterSetting) {
   const velocity = useMemo(() => new THREE.Vector3(), []);
   const inputDirection = useMemo(() => new THREE.Vector3(0, 0, 0), []);
   const linvelDirection = useMemo(() => new THREE.Vector3(), []);
@@ -113,7 +114,7 @@ export default function CharacterSetting({ socket, playerPosition }: ICharacterS
     <RigidBody ref={rapierRef} colliders={false} position={[0, 1.6, 0]} friction={2} lockRotations>
       <CapsuleCollider args={[0.4, 0.4]} position={[0, 0.8, 0]} />
       <group ref={groupRef}>
-        <CharacterModel me={true} nextAction={nextAction} selectCharacter={1} characterRef={characterRef} />
+        <CharacterModel me={true} nextAction={nextAction} selectCharacter={selectCharacter} characterRef={characterRef} />
       </group>
     </RigidBody>
   );
