@@ -3,7 +3,7 @@ import { Server } from "socket.io";
 interface IPlayer {
   id: string;
   name: string;
-  selectCharacter: string;
+  selectCharacter: number;
   position: number[];
   rotation: number[];
   action: string;
