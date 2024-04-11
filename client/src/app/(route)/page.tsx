@@ -16,18 +16,12 @@ export default function HomePage() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const player = useRecoilValue(playerState);
 
-  const onClickCanvas = () => {
-    if (canvasRef.current) {
-      canvasRef.current.requestPointerLock();
-    }
-  };
-
   return (
     <main className={style.main}>
       {player ? (
         <Suspense fallback={null}>
           <ControlsMap>
-            <Canvas ref={canvasRef} shadows camera={{ far: 500, near: 1 }} onClick={onClickCanvas}>
+            <Canvas ref={canvasRef} shadows camera={{ far: 500, near: 1 }} onClick={() => canvasRef.current?.requestPointerLock()}>
               <color attach={"background"} args={["rgb(56, 135, 255)"]} />
               <Lights />
               <Physics>
