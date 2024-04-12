@@ -14,9 +14,10 @@ interface ICharacterSetting {
   socket: Socket | null;
   playerPosition: number[];
   selectCharacter: number;
+  nowAction: string;
 }
 
-export default function CharacterSetting({ socket, playerPosition, selectCharacter }: ICharacterSetting) {
+export default function CharacterSetting({ socket, playerPosition, selectCharacter, nowAction }: ICharacterSetting) {
   const velocity = useMemo(() => new THREE.Vector3(), []);
   const inputDirection = useMemo(() => new THREE.Vector3(0, 0, 0), []);
   const linvelDirection = useMemo(() => new THREE.Vector3(), []);
@@ -104,7 +105,7 @@ export default function CharacterSetting({ socket, playerPosition, selectCharact
     const position = worldPosition.toArray();
     const rotation = worldEuler.toArray();
 
-    if (playerPosition[0] !== position[0] && playerPosition[1] !== position[1] && playerPosition[2] !== position[2]) {
+    if (playerPosition[0] !== position[0] || playerPosition[1] !== position[1] || playerPosition[2] !== position[2] || nowAction !== nextAction) {
       // 캐릭터 위치가 변경되면 새로운 위치 전송
       socket?.emit("move", { position, rotation, action: nextAction });
     }
