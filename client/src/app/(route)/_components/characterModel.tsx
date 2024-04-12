@@ -5,7 +5,7 @@ import { useAnimations, useGLTF } from "@react-three/drei";
 import { RefObject, useEffect, useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { SkeletonUtils } from "three-stdlib";
-import { characterGlb } from "@/app/constants/constants";
+import { characterGlb } from "@/app/_constants/constants";
 
 interface ICharacterModel {
   me: boolean;
