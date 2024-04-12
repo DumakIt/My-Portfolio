@@ -11,6 +11,7 @@ import ControlsMap from "./_components/controlsMap";
 import CreatePlayerPage from "./_components/createPlayer";
 import { useRecoilValue } from "recoil";
 import { playerState } from "../_recoil/playerAtom";
+import Loading from "./_components/loading";
 
 export default function HomePage() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -18,22 +19,20 @@ export default function HomePage() {
 
   return (
     <main className={style.main}>
-      {player ? (
-        <Suspense fallback={null}>
-          <ControlsMap>
-            <Canvas ref={canvasRef} shadows camera={{ far: 500, near: 1 }} onClick={() => canvasRef.current?.requestPointerLock()}>
-              <color attach={"background"} args={["rgb(56, 135, 255)"]} />
-              <Lights />
-              <Physics>
-                <City />
-                <Characters />
-              </Physics>
-            </Canvas>
-          </ControlsMap>
-        </Suspense>
-      ) : (
-        <CreatePlayerPage />
-      )}
+      <Suspense fallback={null}>
+        {!player && <CreatePlayerPage />}
+        <ControlsMap>
+          <Canvas ref={canvasRef} shadows camera={{ far: 500, near: 1 }} onClick={() => canvasRef.current?.requestPointerLock()}>
+            <color attach={"background"} args={["rgb(56, 135, 255)"]} />
+            <Lights />
+            <Physics>
+              <City />
+              <Characters />
+            </Physics>
+          </Canvas>
+        </ControlsMap>
+      </Suspense>
+      <Loading />
     </main>
   );
 }
