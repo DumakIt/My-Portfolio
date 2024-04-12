@@ -23,7 +23,6 @@ export default function HomePage() {
         {!player && <CreatePlayerPage />}
         <ControlsMap>
           <Canvas ref={canvasRef} shadows camera={{ far: 500, near: 1 }} onClick={() => canvasRef.current?.requestPointerLock()}>
-            <color attach={"background"} args={["rgb(56, 135, 255)"]} />
             <Lights />
             <Physics>
               <City />
