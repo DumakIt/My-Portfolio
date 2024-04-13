@@ -6,6 +6,7 @@ import { RefObject, useEffect, useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { SkeletonUtils } from "three-stdlib";
 import { characterGlb } from "@/app/_constants/constants";
+import TextBoard from "./textBoard";
 
 interface ICharacterModel {
   playerStatus: "player" | "otherPlayer" | "create";
@@ -14,10 +15,13 @@ interface ICharacterModel {
   characterRef?: RefObject<THREE.Group>;
   position?: number[];
   rotation?: number[];
+  name?: string;
 }
 
-export default function CharacterModel({ playerStatus, nextAction, selectCharacter, characterRef, position, rotation }: ICharacterModel) {
+export default function CharacterModel({ playerStatus, nextAction, selectCharacter, characterRef, position, rotation, name }: ICharacterModel) {
   const sceneRef = useRef<THREE.Group>(null);
+  const groupRef = useRef<THREE.Group>(null);
+
   const nowAction = useRef("Idle");
 
   const { scene, animations } = useGLTF(`/models/${characterGlb[selectCharacter]}.glb`);
@@ -49,12 +53,17 @@ export default function CharacterModel({ playerStatus, nextAction, selectCharact
     if (playerStatus === "player") return;
     if (position && rotation) {
       // 내캐릭터가 아닌 다른 플레이어의 캐릭터 위치 지정
-      sceneRef.current?.position.set(position[0], position[1], position[2]);
-      sceneRef.current?.rotation.set(rotation[0], rotation[1], rotation[2]);
+      groupRef.current?.position.set(position[0], position[1], position[2]);
+      groupRef.current?.rotation.set(rotation[0], rotation[1], rotation[2]);
     }
   });
 
-  return <primitive ref={characterRef ?? sceneRef} object={clone} />;
+  return (
+    <group ref={groupRef}>
+      {playerStatus !== "create" && name && <TextBoard text={name} position={[0, 1.6, 0]} />}
+      <primitive ref={characterRef ?? sceneRef} object={clone} />
+    </group>
+  );
 }
 
 useGLTF.preload("/models/characterTypeA.glb");

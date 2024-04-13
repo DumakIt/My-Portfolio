@@ -9,15 +9,16 @@ import { useFrame, useThree } from "@react-three/fiber";
 import { useRaycast } from "../_hooks/useRaycast";
 import CharacterModel from "./characterModel";
 import { Socket } from "socket.io-client";
+import { useRecoilValue } from "recoil";
+import { playerState } from "@/app/_recoil/playerAtom";
 
 interface ICharacterSetting {
   socket: Socket | null;
   playerPosition: number[];
-  selectCharacter: number;
   nowAction: string;
 }
 
-export default function CharacterSetting({ socket, playerPosition, selectCharacter, nowAction }: ICharacterSetting) {
+export default function CharacterSetting({ socket, playerPosition, nowAction }: ICharacterSetting) {
   const velocity = useMemo(() => new THREE.Vector3(), []);
   const inputDirection = useMemo(() => new THREE.Vector3(0, 0, 0), []);
   const linvelDirection = useMemo(() => new THREE.Vector3(), []);
@@ -29,6 +30,7 @@ export default function CharacterSetting({ socket, playerPosition, selectCharact
   const groupRef = useRef<THREE.Group>(null);
   const rapierRef = useRef<RapierRigidBody>(null);
 
+  const player = useRecoilValue(playerState);
   const { camera } = useThree();
   const { XRotation, YRotation } = useCharacterCam();
   const { canJump, isFalling } = useRaycast(rapierRef);
@@ -115,7 +117,7 @@ export default function CharacterSetting({ socket, playerPosition, selectCharact
     <RigidBody ref={rapierRef} colliders={false} position={[0, 1.6, 0]} friction={2} lockRotations>
       <CapsuleCollider args={[0.4, 0.4]} position={[0, 0.8, 0]} />
       <group ref={groupRef}>
-        <CharacterModel playerStatus={"player"} nextAction={nextAction} selectCharacter={selectCharacter} characterRef={characterRef} />
+        <CharacterModel playerStatus={"player"} nextAction={nextAction} selectCharacter={player.selectCharacter} characterRef={characterRef} name={player.name} />
       </group>
     </RigidBody>
   );
