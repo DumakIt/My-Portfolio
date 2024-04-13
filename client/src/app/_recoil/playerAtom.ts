@@ -12,12 +12,12 @@ interface Players extends Player {
   action: string;
 }
 
-export const playerState = atom<Player | null>({
+export const playerState = atom<Player>({
   key: "playerState",
-  default: null,
+  default: undefined,
 });
 
-export const playersState = atom<Players[] | null>({
+export const playersState = atom<Players[]>({
   key: "playersState",
-  default: null,
+  default: undefined,
 });
