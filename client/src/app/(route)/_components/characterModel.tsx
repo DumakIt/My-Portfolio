@@ -8,7 +8,7 @@ import { SkeletonUtils } from "three-stdlib";
 import { characterGlb } from "@/app/_constants/constants";
 
 interface ICharacterModel {
-  me: boolean;
+  playerStatus: "player" | "otherPlayer" | "create";
   nextAction: string;
   selectCharacter: number;
   characterRef?: RefObject<THREE.Group>;
@@ -16,7 +16,7 @@ interface ICharacterModel {
   rotation?: number[];
 }
 
-export default function CharacterModel({ me, nextAction, selectCharacter, characterRef, position, rotation }: ICharacterModel) {
+export default function CharacterModel({ playerStatus, nextAction, selectCharacter, characterRef, position, rotation }: ICharacterModel) {
   const sceneRef = useRef<THREE.Group>(null);
   const nowAction = useRef("Idle");
 
@@ -46,7 +46,7 @@ export default function CharacterModel({ me, nextAction, selectCharacter, charac
   });
 
   useFrame(() => {
-    if (me) return;
+    if (playerStatus === "player") return;
     if (position && rotation) {
       // 내캐릭터가 아닌 다른 플레이어의 캐릭터 위치 지정
       sceneRef.current?.position.set(position[0], position[1], position[2]);

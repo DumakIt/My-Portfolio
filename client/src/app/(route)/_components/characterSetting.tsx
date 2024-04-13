@@ -115,7 +115,7 @@ export default function CharacterSetting({ socket, playerPosition, selectCharact
     <RigidBody ref={rapierRef} colliders={false} position={[0, 1.6, 0]} friction={2} lockRotations>
       <CapsuleCollider args={[0.4, 0.4]} position={[0, 0.8, 0]} />
       <group ref={groupRef}>
-        <CharacterModel me={true} nextAction={nextAction} selectCharacter={selectCharacter} characterRef={characterRef} />
+        <CharacterModel playerStatus={"player"} nextAction={nextAction} selectCharacter={selectCharacter} characterRef={characterRef} />
       </group>
     </RigidBody>
   );

@@ -49,7 +49,7 @@ export default function CreatePlayerPage() {
             <Canvas shadows camera={{ position: [0, 0, 1.5] }}>
               <Lights />
               <OrbitControls autoRotate autoRotateSpeed={5} enableZoom={false} />
-              <CharacterModel me={false} nextAction={"Idle"} selectCharacter={selectCharacter} position={[0, -0.7, 0]} rotation={[0, 0, 0]} />
+              <CharacterModel playerStatus={"create"} nextAction={"Idle"} selectCharacter={selectCharacter} position={[0, -0.7, 0]} rotation={[0, 0, 0]} />
             </Canvas>
           </div>
           <button
