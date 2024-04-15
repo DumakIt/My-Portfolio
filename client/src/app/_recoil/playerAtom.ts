@@ -1,12 +1,12 @@
 import { atom } from "recoil";
 
-interface Player {
+interface player {
   id: string;
   name: string;
   selectCharacter: number;
 }
 
-interface Players extends Player {
+interface players extends player {
   position: number[];
   rotation: number[];
   action: string;
@@ -19,12 +19,12 @@ interface messages {
   message: string;
 }
 
-export const playerState = atom<Player>({
+export const playerState = atom<player>({
   key: "playerState",
   default: undefined,
 });
 
-export const playersState = atom<Players[]>({
+export const playersState = atom<players[]>({
   key: "playersState",
   default: undefined,
 });
