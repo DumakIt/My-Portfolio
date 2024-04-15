@@ -1,4 +1,5 @@
 import { Server } from "socket.io";
+import { v4 as uuidv4 } from "uuid";
 
 interface IPlayer {
   id: string;
@@ -31,8 +32,16 @@ io.on("connection", (socket) => {
     };
     players.push(newPlayer);
 
+    const welcomeMessage = {
+      id: uuidv4(),
+      senderId: "system",
+      senderName: name,
+      message: `${name}님이 접속하였습니다.`,
+    };
+
     socket.emit("player", newPlayer);
     io.emit("players", players);
+    io.emit("message", welcomeMessage);
   });
 
   socket.on("move", ({ position, rotation, action }) => {
@@ -47,7 +56,18 @@ io.on("connection", (socket) => {
   });
 
   socket.on("message", (message) => {
-    io.emit("receive", message);
+    const sender = players.find((player) => player.id === socket.id);
+
+    if (sender) {
+      const newMessage = {
+        id: uuidv4(),
+        senderId: sender.id,
+        senderName: sender.name,
+        message,
+      };
+
+      io.emit("message", newMessage);
+    }
   });
 
   socket.on("disconnect", () => {
