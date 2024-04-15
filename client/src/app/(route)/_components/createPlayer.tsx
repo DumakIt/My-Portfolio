@@ -29,7 +29,7 @@ export default function CreatePlayerPage() {
             defaultValue={name}
             placeholder="닉네임을 입력해 주세요."
             onChange={(e) => {
-              setName(e.currentTarget.value.trim());
+              setName(e.currentTarget.value.trim().replace(/ {2,}/g, " "));
             }}
           />
           <button
