@@ -5,7 +5,7 @@ import { Canvas } from "@react-three/fiber";
 import Lights from "./_components/lights";
 import { Suspense, useRef } from "react";
 import { Physics } from "@react-three/rapier";
-import { City } from "./_components/city";
+import City from "./_components/city";
 import Characters from "./_components/characters";
 import ControlsMap from "./_components/controlsMap";
 import CreatePlayerPage from "./_components/createPlayer";

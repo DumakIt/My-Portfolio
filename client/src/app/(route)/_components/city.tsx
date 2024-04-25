@@ -4,7 +4,7 @@ import { useGLTF } from "@react-three/drei";
 import { RigidBody } from "@react-three/rapier";
 import { useLayoutEffect } from "react";
 
-export const City = () => {
+export default function City() {
   const { scene } = useGLTF("/models/city.glb");
 
   useLayoutEffect(() => {
@@ -22,6 +22,6 @@ export const City = () => {
       <primitive object={scene} />
     </RigidBody>
   );
-};
+}
 
 useGLTF.preload("/models/city.glb");
