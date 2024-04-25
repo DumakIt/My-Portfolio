@@ -13,6 +13,7 @@ import { useRecoilValue } from "recoil";
 import { playerState } from "../_recoil/playerAtom";
 import Loading from "./_components/loading";
 import ChatArea from "./_components/chatArea";
+import KeyInfo from "./_components/keyInfo";
 
 export default function HomePage() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -32,6 +33,7 @@ export default function HomePage() {
           </Canvas>
         </ControlsMap>
         <ChatArea />
+        <KeyInfo />
       </Suspense>
       <Loading />
     </main>
