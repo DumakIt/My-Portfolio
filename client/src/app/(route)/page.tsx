@@ -14,6 +14,7 @@ import { playerState } from "../_recoil/playerAtom";
 import Loading from "./_components/loading";
 import ChatArea from "./_components/chatArea";
 import KeyInfo from "./_components/keyInfo";
+import Sea from "./_components/sea";
 
 export default function HomePage() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -30,6 +31,7 @@ export default function HomePage() {
               <City />
               <Characters />
             </Physics>
+            <Sea />
           </Canvas>
         </ControlsMap>
         <ChatArea />
