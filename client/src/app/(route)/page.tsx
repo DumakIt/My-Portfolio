@@ -15,6 +15,7 @@ import Loading from "./_components/loading";
 import ChatArea from "./_components/chatArea";
 import KeyInfo from "./_components/keyInfo";
 import Sea from "./_components/sea";
+import BlockWall from "./_components/blockWall";
 
 export default function HomePage() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -29,6 +30,7 @@ export default function HomePage() {
             <Lights />
             <Physics>
               <City />
+              <BlockWall />
               <Characters />
             </Physics>
             <Sea />
