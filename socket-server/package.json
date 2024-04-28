@@ -6,7 +6,7 @@
   "scripts": {
     "build": "npx tsc",
     "dev": "nodemon --watch \"*.ts\" --exec \"ts-node\" server.ts",
-    "start": "node server.s"
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "CMK",
