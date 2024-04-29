@@ -18,7 +18,7 @@ export default function SocketProvider({ children }: { children: React.ReactNode
   const setMessages = useSetRecoilState(messagesState);
 
   useEffect(() => {
-    const socket = io("http://localhost:4000");
+    const socket = io(String(process.env.NEXT_PUBLIC_SERVER_URL));
     setContextSocket(socket);
 
     socket.on("player", (player) => {
