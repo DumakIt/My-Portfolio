@@ -1,5 +1,6 @@
 import { config } from "dotenv";
 import { Server } from "socket.io";
+import { createServer } from "http";
 import { v4 as uuidv4 } from "uuid";
 
 config();
@@ -13,7 +14,9 @@ interface IPlayer {
   action: string;
 }
 
-const io = new Server({
+const httpServer = createServer();
+
+const io = new Server(httpServer, {
   cors: {
     origin: process.env.FRONT_URL,
   },
@@ -84,4 +87,4 @@ io.on("connection", (socket) => {
   });
 });
 
-io.listen(Number(process.env.PORT));
+httpServer.listen(Number(process.env.PORT));
