@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# PlayWorld
+ 메타버스 커뮤니티 개인 프로젝트로 three.js 기반의 react three fiber 및 socket.io 연습을 위해 진행하였습니다.
 
-## Getting Started
+## 배포 주소
+> 배포 주소: https://playworld-lyart.vercel.app/
 
-First, run the development server:
+## 시작 가이드
 
+### Installation
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+  git clone https://github.com/DumakIt/PlayWorld.git
+  cd PlayWorld
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Frontend
+```bash
+  cd client
+  npm install or yarn install
+  .env.local 생성 및 작성
+  npm run dev or yarn dev
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Backend
+```bash
+  cd socket-server
+  npm install or yarn install
+  .env 생성 및 작성
+  npm run dev or yarn dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## 시연 자료
 
-## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+|        기능        | 영상                                                                                                                                           |
+| :---: | :---: |
+|      캐릭터 생성            | ![playworld 생성](https://github.com/DumakIt/PlayWorld/assets/112146844/dbd79890-9c4b-4dcc-81ee-3b61f53e01a7)                                |
+|      캐릭터 조작          | ![playworld 조작](https://github.com/DumakIt/PlayWorld/assets/112146844/58686d56-c8c8-4077-be99-1fe70d22dfc7)                                      | 
+|      채팅      | ![playworld 채팅](https://github.com/DumakIt/PlayWorld/assets/112146844/4ec95db2-49cc-4e40-80cb-ea6e8a0c1eb1)                                   |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
