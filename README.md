@@ -1,5 +1,6 @@
 # PlayWorld
- 메타버스 커뮤니티 개인 프로젝트로 three.js 기반의 react three fiber 및 socket.io 연습을 위해 진행하였습니다.
+ 메타버스 커뮤니티 개인 프로젝트로 three.js 기반의 react three fiber 및 socket.io 연습을 위해 진행하였습니다. <br/>
+ three.js의 기본기를 쌓으면서 socket.io 및 gcp를 이용한 백엔드 배포를 경험해 볼 수 있었습니다.
 
 ## 배포 주소
 > 배포 주소: https://playworld-lyart.vercel.app/
